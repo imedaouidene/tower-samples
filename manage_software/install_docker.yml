@@ -1,0 +1,44 @@
+---
+- name: install and configure docker for CentOS
+  hosts: all 
+  vars: 
+  tasks: 
+    - name: check system requirements
+      fail: 
+        msg: System requirements not valid
+      when:  ansible_facts.distribution != "CentOS" 
+    - name: Uninstall old versions
+      yum: 
+        name: 
+          - docker  
+          - docker-client  
+          - docker-client-latest  
+          - docker-common  
+          - docker-latest  
+          - docker-latest-logrotate  
+          - docker-logrotate  
+          - docker-engine
+        state: absent
+    - name: add Docker-CE repository 
+      yum_repository: 
+        name: docker-ce-stable
+        description: 'Docker CE Stable - $basearch'
+        file: docker-ce
+        baseurl: 'https://download.docker.com/linux/centos/7/$basearch/stable'
+        gpgcheck: yes
+        enabled: yes
+        gpgkey: 'https://download.docker.com/linux/centos/gpg'
+    - name: install Docker package
+      yum: 
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: latest
+    - name: start and enable Docker service
+      service: 
+        name: docker
+        state: started
+        enabled: yes
+        
+       
