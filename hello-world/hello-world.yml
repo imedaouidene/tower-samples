@@ -1,0 +1,7 @@
+---
+- name: hello world play
+  hosts: all
+  tasks:
+    - name: debug hello world
+      debug: 
+        msg: Hello world from {{ ansible_facts.hostname }}
