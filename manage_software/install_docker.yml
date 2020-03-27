@@ -2,6 +2,8 @@
 - name: install and configure docker for CentOS
   hosts: all 
   vars: 
+   user: centos
+   add_group_to_user: true
   tasks: 
     - name: check system requirements
       fail: 
@@ -40,5 +42,13 @@
         name: docker
         state: started
         enabled: yes
-        
-       
+    - block: 
+        - name: create docker group
+          group: 
+            name: docker
+            state: present
+        - name: add user to docker group
+          user: 
+            name: "{{ user }}"
+            groups: docker
+      when: add_group_to_user
