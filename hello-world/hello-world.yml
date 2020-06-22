@@ -4,4 +4,4 @@
   tasks:
     - name: debug hello world
       debug: 
-        msg: Hello world from {{ ansible_facts.hostname }}
+        msg: Hello world from {{ ansible_facts.hostname }} v2
